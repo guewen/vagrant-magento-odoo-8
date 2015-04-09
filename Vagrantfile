@@ -51,7 +51,7 @@ Vagrant.configure(2) do |config|
   #
     # Customize the amount of memory on the VM:
     vb.memory = "4096"
-    vb.cpus = 3
+    vb.cpus = 2
   end
   #
   # View the documentation for the provider you are using for more
@@ -74,5 +74,6 @@ Vagrant.configure(2) do |config|
   config.vm.provision "file", source: "templates/magento/mage-cache.xml", destination: "/var/www/app/etc/mage-cache.xml"
   config.vm.provision "file", source: "templates/magento/seturl.php", destination: "/var/www/seturl.php"
   config.vm.provision "shell", path: "magento_start.sh"
+  config.vm.provision "shell", path: "odoo.sh"
   config.vm.provision "shell", path: "last.sh"
 end
