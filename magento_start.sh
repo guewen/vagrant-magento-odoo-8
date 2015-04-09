@@ -3,7 +3,6 @@
 set -e
 
 sed -i "s@^memory_limit =.*@memory_limit = 256M@" /etc/php5/fpm/php.ini
-echo "daemon off;" >> /etc/nginx/nginx.conf
 
 echo "setting the default installer info for magento"
 sed -i "s/<host>localhost/<host>db/g" /var/www/app/etc/config.xml
