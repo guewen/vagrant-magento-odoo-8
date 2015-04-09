@@ -2,6 +2,7 @@
 
 set -e
 
+sed -i "s@^memory_limit =.*@memory_limit = 256M@" /etc/php5/fpm/php.ini
 echo "daemon off;" >> /etc/nginx/nginx.conf
 
 echo "setting the default installer info for magento"
@@ -56,4 +57,5 @@ php -f /var/www/install.php -- \
 --admin_username "admin" \
 --admin_password "admin25"
 
+service php5-fpm restart
 nginx -s reload
