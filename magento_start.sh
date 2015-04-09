@@ -1,5 +1,8 @@
 #! /bin/bash
 
+set -e
+
+echo "daemon off;" >> /etc/nginx/nginx.conf
 
 echo "setting the default installer info for magento"
 sed -i "s/<host>localhost/<host>db/g" /var/www/app/etc/config.xml
@@ -8,19 +11,19 @@ sed -i "s/<password\/>/<password>password<\/password>/g" /var/www/app/etc/config
 
 echo "Creating the magento database..."
 
-echo "create database magento" | mysql -u "vagrant" --password="$MARIADB_PASS" -h db -P "3306"
+echo "create database magento" | mysql -u "vagrant" --password="vagrant" -h localhost -P "3306"
 
 while [ $? -ne 0 ]; do
 	sleep 5
-        echo "create database magento" | mysql -u "vagrant" --password="$MARIADB_PASS" -h db -P "3306"
-        echo "show tables" | mysql -u "vagrant" --password="$MARIADB_PASS" -h db -P "3306" magento
+        echo "create database magento" | mysql -u "vagrant" --password="vagrant" -h localhost -P "3306"
+        echo "show tables" | mysql -u "vagrant" --password="vagrant" -h localhost -P "3306" magento
 done
 
 echo "Loading sample data"
-mysql -u "vagrant" --password="$MARIADB_PASS" -h db -P "3306" magento < /tmp/magento-sample-data-*/magento_sample_data*.sql
+mysql -u "vagrant" --password="vagrant" -h localhost -P "3306" magento < /tmp/magento-sample-data-*/magento_sample_data*.sql
 
 echo "Moving sample media"
-mv /tmp/magento-sample-data-*/media/* /var/www/app/media
+cp -r /tmp/magento-sample-data-*/media/* /var/www/media
 
 echo "Moving Magento Connector module"
 mv /tmp/module-magento-trunk/Openlabs_OpenERPConnector-1.1.0/app/etc/modules/Openlabs_OpenERPConnector.xml /var/www/app/etc/modules/
@@ -37,11 +40,11 @@ php -f /var/www/install.php -- \
 --locale "fr_FR" \
 --timezone "Europe/Berlin" \
 --default_currency "EUR" \
---db_host "db" \
+--db_host "localhost" \
 --db_name "magento" \
 --db_user "vagrant" \
---db_pass "$MARIADB_PASS" \
---url "/" \
+--db_pass "vagrant" \
+--url "http://localhost:8080" \
 --skip_url_validation \
 --use_rewrites no \
 --use_secure no \
@@ -51,8 +54,6 @@ php -f /var/www/install.php -- \
 --admin_lastname "Admin" \
 --admin_email "admin@admin.com" \
 --admin_username "admin" \
---admin_password "admin"
+--admin_password "admin25"
 
-# service php-fpm start
-
-# nginx
+nginx -s reload

@@ -69,8 +69,8 @@ Vagrant.configure(2) do |config|
   # documentation for more information about their specific syntax and use.
   config.vm.provision "shell", path: "mariadb.sh"
   config.vm.provision "shell", path: "memcached.sh"
-  config.vm.provision "file", source: "templates/nginx.conf", destination: "/etc/nginx/conf.d/default.conf"
   config.vm.provision "shell", path: "magento.sh"
+  config.vm.provision "file", source: "templates/nginx.conf", destination: "/etc/nginx/conf.d/default.conf"
   config.vm.provision "file", source: "templates/magento/mage-cache.xml", destination: "/var/www/app/etc/mage-cache.xml"
   config.vm.provision "file", source: "templates/magento/seturl.php", destination: "/var/www/seturl.php"
   config.vm.provision "shell", path: "magento_start.sh"
