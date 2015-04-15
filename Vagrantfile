@@ -80,5 +80,6 @@ Vagrant.configure(2) do |config|
   config.vm.provision "seturl_config_mv", type: "shell", inline: "cp /tmp/seturl.php /var/www/seturl.php"
   config.vm.provision "magento_service", type: "shell", path: "magento_start.sh"
   config.vm.provision "odoo", type: "shell", path: "odoo.sh"
+  config.vm.provision "odoo_bootstrap", type: "shell", path: "odoo_bootstrap.sh", privileged: false
   config.vm.provision "clean", type: "shell", path: "last.sh"
 end
