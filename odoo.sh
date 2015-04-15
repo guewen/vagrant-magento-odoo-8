@@ -9,20 +9,35 @@ DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
     npm \
     python-support \
     python-pyinotify \
-    postgresql
+    postgresql \
+    postgresql-server-dev-9.3 \
+    libjpeg8-dev \
+    libfreetype6-dev \
+    libsasl2-dev \
+    libxslt-dev \
+    libxml2-dev \
+    libldap2-dev \
 
 DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
   python-geoip python-gevent \
   python-ldap python-lxml python-markupsafe python-pil python-pip \
   python-psutil python-psycopg2 python-pychart python-pydot \
-  python-reportlab python-simplejson python-yaml
+  python-reportlab python-simplejson python-yaml python-dev
 
-sudo -u postgres createuser vagrant -s -w
+user_exists=`sudo -u postgres psql postgres -Upostgres -tAc "SELECT 1 FROM pg_roles WHERE rolname='vagrant'"`
+echo "$user_exists"
+if [ -z "$user_exists" ]; 
+  then 
+    sudo -u postgres createuser vagrant -s -w
+fi 
 sudo -u postgres psql --command \
   "ALTER USER vagrant WITH PASSWORD 'vagrant';"
 
 npm install -g less less-plugin-clean-css
-ln -s /usr/bin/nodejs /usr/bin/node
+if [ ! -h /usr/bin/node ];
+  then
+      ln -s /usr/bin/nodejs /usr/bin/node
+fi
 cd /tmp
 curl -o wkhtmltox.deb -SL \
   http://downloads.sourceforge.net/project/wkhtmltopdf/archive/0.12.1/wkhtmltox-0.12.1_linux-trusty-i386.deb
@@ -32,16 +47,3 @@ apt-get -y install -f --no-install-recommends
 rm -f wkhtmltox.deb
 
 pip install virtualenv
-
-# buildout might need it
-git config --global user.email "odoo@example.com"
-git config --global user.name "Odoo Vagrant Demo"
-
-cd /home/vagrant
-git clone git://github.com/guewen/odoo-connector-magento-buildout.git -b 8.0-new-job-runner odoo
-cd odoo
-./bootstrap.sh
-bin/buildout
-createdb odoo_magento8
-bin/start_openerp -d odoo_magento8 -i magentoerpconnect --stop-after-init
-bin/supervisord
