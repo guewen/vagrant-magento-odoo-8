@@ -22,8 +22,9 @@ echo "root:${MARIADB_PASS}" >> /home/vagrant/.mysql-passes
 echo "vagrant:${MARIADB_VAGRANT_PASS}" >> /home/vagrant/.mysql-passes
 
 mysql -uroot -p$MARIADB_PASS <<-EOF
-  CREATE USER 'vagrant'@'localhost' IDENTIFIED BY '$MARIADB_VAGRANT_PASS';
-  GRANT ALL ON *.* TO 'vagrant'@'localhost';
+  # In MYSQL/MariaDB grant will create user if it does not exists
+  # this approach should avoid issues if provider is rerun
+  GRANT ALL ON *.* TO 'vagrant'@'localhost' IDENTIFIED BY '$MARIADB_VAGRANT_PASS';
   GRANT ALL ON *.* TO 'vagrant'@'%';
 EOF
 
