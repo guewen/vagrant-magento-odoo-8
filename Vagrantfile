@@ -79,5 +79,6 @@ Vagrant.configure(2) do |config|
   config.vm.provision "magento_service", type: "shell", path: "magento_start.sh"
   config.vm.provision "odoo", type: "shell", path: "odoo.sh"
   config.vm.provision "odoo_bootstrap", type: "shell", path: "odoo_bootstrap.sh", privileged: false
+  config.vm.provision "odoo_start_on_boot", type: "shell", path: "odoo_start_on_boot.sh"
   config.vm.provision "clean", type: "shell", path: "last.sh"
 end
