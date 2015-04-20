@@ -45,7 +45,7 @@ php -f /var/www/install.php -- \
 --db_name "magento" \
 --db_user "vagrant" \
 --db_pass "vagrant" \
---url "http://localhost:8080" \
+--url "http://127.0.0.1:8080" \
 --skip_url_validation \
 --use_rewrites no \
 --use_secure no \
