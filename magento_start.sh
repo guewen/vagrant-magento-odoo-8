@@ -24,6 +24,7 @@ mysql -u "vagrant" --password="vagrant" -h localhost -P "3306" magento < /tmp/ma
 
 echo "Moving sample media"
 cp -r /tmp/magento-sample-data-*/media/* /var/www/media
+cp -r /tmp/magento-sample-data-*/skin/* /var/www/skin
 
 echo "Moving Magento Connector module"
 mv /tmp/module-magento-trunk/Openlabs_OpenERPConnector-1.1.0/app/etc/modules/Openlabs_OpenERPConnector.xml /var/www/app/etc/modules/
