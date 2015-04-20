@@ -73,12 +73,9 @@ Vagrant.configure(2) do |config|
   config.vm.provision "magento", type: "shell", path: "magento.sh"
   # latest version of Vagrant require user to have write permission on desitnation folder
   # the sudo context is know set to false. Making the inline shell command is proposed by Michael
-  config.vm.provision "nginx_config", type: "file", source: "templates/nginx.conf", destination: "/tmp/default.conf"
-  config.vm.provision "nginx_config_mv", type: "shell", inline: "cp /tmp/default.conf /etc/nginx/conf.d/default.conf"
-  config.vm.provision "mage_cache_config", type: "file", source: "templates/magento/mage-cache.xml", destination: "/tmp/mage-cache.xml"
-  config.vm.provision "mage_cache_config_mv", type: "shell", inline: "cp /tmp/mage-cache.xml /var/www/app/etc/mage-cache.xml"
-  config.vm.provision "seturl_config", type: "file", source: "templates/magento/seturl.php", destination: "/tmp/seturl.php"
-  config.vm.provision "seturl_config_mv", type: "shell", inline: "cp /tmp/seturl.php /var/www/seturl.php"
+  config.vm.provision "nginx_config_mv", type: "shell", inline: "cp /vagrant/templates/nginx/default.conf /etc/nginx/conf.d/default.conf"
+  config.vm.provision "mage_cache_config_mv", type: "shell", inline: "cp /vagrant/templates/magento/mage-cache.xml /var/www/app/etc/mage-cache.xml"
+  config.vm.provision "seturl_config_mv", type: "shell", inline: "cp /vagrant/templates/magento/seturl.php /var/www/seturl.php"
   config.vm.provision "magento_service", type: "shell", path: "magento_start.sh"
   config.vm.provision "odoo", type: "shell", path: "odoo.sh"
   config.vm.provision "odoo_bootstrap", type: "shell", path: "odoo_bootstrap.sh", privileged: false
