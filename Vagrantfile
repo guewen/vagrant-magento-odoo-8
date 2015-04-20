@@ -67,13 +67,19 @@ Vagrant.configure(2) do |config|
   # Enable provisioning with a shell script. Additional provisioners such as
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
-  config.vm.provision "shell", path: "mariadb.sh"
-  config.vm.provision "shell", path: "memcached.sh"
-  config.vm.provision "shell", path: "magento.sh"
-  config.vm.provision "file", source: "templates/nginx.conf", destination: "/etc/nginx/conf.d/default.conf"
-  config.vm.provision "file", source: "templates/magento/mage-cache.xml", destination: "/var/www/app/etc/mage-cache.xml"
-  config.vm.provision "file", source: "templates/magento/seturl.php", destination: "/var/www/seturl.php"
-  config.vm.provision "shell", path: "magento_start.sh"
-  config.vm.provision "shell", path: "odoo.sh"
-  config.vm.provision "shell", path: "last.sh"
+  config.vm.provision "mariadb", type: "shell", path: "mariadb.sh"
+  config.vm.provision "memcached", type: "shell", path: "memcached.sh"
+  config.vm.provision "magento", type: "shell", path: "magento.sh"
+  # latest version of Vagrant require user to have write permission on desitnation folder
+  # the sudo context is know set to false. Making the inline shell command is proposed by Michael
+  config.vm.provision "nginx_config", type: "file", source: "templates/nginx.conf", destination: "/tmp/default.conf"
+  config.vm.provision "nginx_config_mv", type: "shell", inline: "cp /tmp/default.conf /etc/nginx/conf.d/default.conf"
+  config.vm.provision "mage_cache_config", type: "file", source: "templates/magento/mage-cache.xml", destination: "/tmp/mage-cache.xml"
+  config.vm.provision "mage_cache_config_mv", type: "shell", inline: "cp /tmp/mage-cache.xml /var/www/app/etc/mage-cache.xml"
+  config.vm.provision "seturl_config", type: "file", source: "templates/magento/seturl.php", destination: "/tmp/seturl.php"
+  config.vm.provision "seturl_config_mv", type: "shell", inline: "cp /tmp/seturl.php /var/www/seturl.php"
+  config.vm.provision "magento_service", type: "shell", path: "magento_start.sh"
+  config.vm.provision "odoo", type: "shell", path: "odoo.sh"
+  config.vm.provision "odoo_bootstrap", type: "shell", path: "odoo_bootstrap.sh", privileged: false
+  config.vm.provision "clean", type: "shell", path: "last.sh"
 end
