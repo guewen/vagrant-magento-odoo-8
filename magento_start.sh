@@ -59,3 +59,5 @@ php -f /var/www/install.php -- \
 
 service php5-fpm restart
 nginx -s reload
+
+chmod -R o+w media/catalog
